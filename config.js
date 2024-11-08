@@ -2,7 +2,7 @@
 module.exports = {
   database: "willfood",
   username: "root",
-  password: "",
+  password: "root",
   host: "localhost",
   dialect: "mysql",
 };

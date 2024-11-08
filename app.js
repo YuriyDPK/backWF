@@ -1,35 +1,33 @@
 // app.js
 const express = require("express");
 const sequelize = require("./db");
-const Order = require("./models/Order");
+const User = require('./models/User'); // импорт модели User
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 app.use(express.json());
 
-// Синхронизация базы данных
-sequelize.sync().then(() => {
-  console.log("Database synchronized");
-});
-
-// Маршрут для создания заказа
-app.post("/orders", async (req, res) => {
+// Подключение к базе данных и синхронизация
+async function initDatabase() {
   try {
-    const { item, quantity, price } = req.body;
-    const order = await Order.create({ item, quantity, price });
-    res.status(201).json(order);
+    await sequelize.authenticate();
+    console.log('Connection to MySQL has been established successfully.');
+    
+    // Синхронизация модели с базой данных
+    await sequelize.sync({ force: false }); // Используйте { force: true }, чтобы пересоздать таблицы
+    console.log('Database & tables created!');
   } catch (error) {
-    res.status(500).json({ error: "Failed to create order" });
+    console.error('Unable to connect to the database:', error);
   }
-});
+}
 
-// Маршрут для получения всех заказов
-app.get("/orders", async (req, res) => {
-  try {
-    const orders = await Order.findAll();
-    res.json(orders);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to retrieve orders" });
-  }
+initDatabase();
+
+// Подключение маршрутов
+app.use('/api/auth', authRoutes);
+// Тестовый маршрут
+app.get('/test', (req, res) => {
+  res.status(200).json({ message: 'Server is working!' });
 });
 
 // Запуск сервера
