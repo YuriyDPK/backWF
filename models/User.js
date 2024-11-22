@@ -3,6 +3,11 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../db'); // подключение к базе данных
 
 const User = sequelize.define('User', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
   phone_number: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -20,11 +25,11 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: true
   },
-  date_of_birth: {
+  date_birthday: {
     type: DataTypes.DATEONLY,
     allowNull: true
   },
-  gender: {
+  sex: {
     type: DataTypes.STRING,
     allowNull: true
   },
@@ -45,7 +50,7 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     defaultValue: 'Basic'
   },
-  bonus_balance: {
+  bonuses: {
     type: DataTypes.INTEGER,
     defaultValue: 0
   },
@@ -70,7 +75,19 @@ const User = sequelize.define('User', {
     type: DataTypes.ENUM('user', 'courier', 'admin'), // роли пользователей
     defaultValue: 'user'
   },
-  full_address: {
+  subscription_status: { // Статус подписки пользователя
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  subscription_start_date: { // Дата начала подписки
+    type: DataTypes.DATE,
+    allowNull: true
+  },
+  subscription_end_date: { // Дата окончания подписки
+    type: DataTypes.DATE,
+    allowNull: true
+  },
+  full_address: { // Полный адрес пользователя
     type: DataTypes.STRING,
     allowNull: true
   }

@@ -1,11 +1,16 @@
 // app.js
 const express = require("express");
 const sequelize = require("./db");
-const User = require('./models/User'); // импорт модели User
-const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
+const cors = require('cors');
+const path = require('path'); // Импортируем path для работы с путями
 
 const app = express();
 app.use(express.json());
+// Простая настройка CORS
+app.use(cors());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 // Подключение к базе данных и синхронизация
 async function initDatabase() {
@@ -24,11 +29,7 @@ async function initDatabase() {
 initDatabase();
 
 // Подключение маршрутов
-app.use('/api/auth', authRoutes);
-// Тестовый маршрут
-app.get('/test', (req, res) => {
-  res.status(200).json({ message: 'Server is working!' });
-});
+app.use('/api/user', userRoutes);
 
 // Запуск сервера
 const PORT = process.env.PORT || 3000;
