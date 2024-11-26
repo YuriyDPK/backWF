@@ -1,35 +1,31 @@
 // models/Goal.js
 const { DataTypes } = require('sequelize');
-const sequelize = require('../db'); // подключение к базе данных
+const sequelize = require('../db'); // Подключение к базе данных
 
 const Goal = sequelize.define('Goal', {
-  id: { // Уникальный идентификатор цели
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
-  },
-  name: { // Название цели
+  name: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
-  description: { // Описание цели
+  calories: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  meals_count: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  description: {
     type: DataTypes.TEXT,
-    allowNull: true
   },
-  kkal_target: { // Целевое количество калорий
-    type: DataTypes.INTEGER,
-    allowNull: true
+  price_per_day: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
   },
-  price_range: { // Диапазон цен для достижения цели
+  image_url: {
     type: DataTypes.STRING,
-    allowNull: true
+    allowNull: true,
   },
-  meal_count: { // Количество приемов пищи
-    type: DataTypes.INTEGER,
-    allowNull: true
-  }
-}, {
-  tableName: 'goals' // указание имени таблицы
 });
 
 module.exports = Goal;

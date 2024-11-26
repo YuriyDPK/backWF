@@ -1,157 +1,144 @@
 // routes/mealRoutes.js
-const express = require("express");
-const multer = require("multer");
-const fs = require("fs");
-const path = require("path");
-const Meal = require("../models/Meal");
+const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const Meal = require('../models/Meal'); // Импорт модели Meal
+const Ingredient = require('../models/Ingredient'); // Импорт модели Meal
 
 const router = express.Router();
 
-// Настройка хранения файлов с использованием multer
+// Настройка хранения файлов для изображений приемов пищи
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/meal");
-  },
+  destination: './uploads/meals', // Папка для сохранения файлов
   filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
+    cb(null, `${Date.now()}-${file.originalname}`); // Уникальное имя файла
   },
 });
-
 const upload = multer({ storage });
 
-// Создание нового блюда
-router.post("/", upload.single("image"), async (req, res) => {
-  const { category, name, cost, description } = req.body;
-  const image_url = req.file ? req.file.path : null;
+// === Маршруты для модели Meal ===
 
-  if (!category || !name) {
-    return res
-      .status(400)
-      .json({ error: "Необходимо указать категорию и название блюда" });
-  }
+// 1. Создание нового приема пищи
+router.post('/', upload.single('image'), async (req, res) => {
+  const { name, meal_type, calories, protein, fats, carbs, description } = req.body;
 
   try {
-    const meal = await Meal.create({
-      category,
+    const imageUrl = req.file ? `/uploads/meals/${req.file.filename}` : null;
+
+    const newMeal = await Meal.create({
       name,
-      cost,
+      meal_type,
+      calories,
+      protein,
+      fats,
+      carbs,
       description,
-      image_url,
+      image_url: imageUrl,
     });
-    return res.status(201).json(meal);
+
+    return res.status(201).json(newMeal);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Ошибка сервера" });
+    return res.status(500).json({ error: 'Ошибка при создании приема пищи' });
   }
 });
 
-// Получение всех блюд
-router.get("/", async (req, res) => {
+// 2. Получение списка всех приемов пищи
+router.get('/', async (req, res) => {
   try {
     const meals = await Meal.findAll();
     return res.status(200).json(meals);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Ошибка сервера" });
+    return res.status(500).json({ error: 'Ошибка при получении приемов пищи' });
   }
 });
-
-// Получение блюда по ID
-router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-
+// Получение списка всех приемов пищи вместе с ингредиентами
+router.get('/with-ingridients', async (req, res) => {
   try {
-    const meal = await Meal.findByPk(id);
-
-    if (!meal) {
-      return res.status(404).json({ error: "Блюдо не найдено" });
-    }
-
-    return res.status(200).json(meal);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Ошибка сервера" });
-  }
-});
-
-// Получение блюд по категории
-router.get("/category/:category", async (req, res) => {
-  const { category } = req.params;
-
-  try {
-    const meals = await Meal.findAll({ where: { category } });
-
-    if (meals.length === 0) {
-      return res
-        .status(404)
-        .json({ error: "Блюда не найдены для указанной категории" });
-    }
-
+    const meals = await Meal.findAll({
+      include: [
+        {
+          model: Ingredient,
+          through: { attributes: [] }, // Для модели MealIngredient
+          attributes: ['id', 'name', 'calories', 'protein', 'fats', 'carbs', 'weight'],
+        },
+      ],
+    });
     return res.status(200).json(meals);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Ошибка сервера" });
+    return res.status(500).json({ error: 'Ошибка при получении приемов пищи' });
   }
 });
-
-// Обновление блюда по ID
-router.put("/:id", upload.single("image"), async (req, res) => {
+// 3. Получение одного приема пищи по ID
+router.get('/:id', async (req, res) => {
   const { id } = req.params;
-  const { category, name, cost, description } = req.body;
-  const image_url = req.file ? req.file.path : null;
 
   try {
     const meal = await Meal.findByPk(id);
 
     if (!meal) {
-      return res.status(404).json({ error: "Блюдо не найдено" });
+      return res.status(404).json({ error: 'Прием пищи не найден' });
     }
 
-    // Удаление старого изображения, если загружено новое
-    if (image_url && meal.image_url) {
-      fs.unlink(path.join(__dirname, "../", meal.image_url), (err) => {
-        if (err) console.error("Ошибка при удалении файла: ", err);
-      });
-    }
-
-    await meal.update({
-      category,
-      name,
-      cost,
-      description,
-      image_url: image_url || meal.image_url,
-    });
     return res.status(200).json(meal);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Ошибка сервера" });
+    return res.status(500).json({ error: 'Ошибка при получении приема пищи' });
   }
 });
 
-// Удаление блюда по ID
-router.delete("/:id", async (req, res) => {
+// 4. Обновление приема пищи по ID
+router.put('/:id', upload.single('image'), async (req, res) => {
+  const { id } = req.params;
+  const { name, meal_type, calories, protein, fats, carbs, description } = req.body;
+
+  try {
+    const meal = await Meal.findByPk(id);
+
+    if (!meal) {
+      return res.status(404).json({ error: 'Прием пищи не найден' });
+    }
+
+    // Если загружается новое изображение, добавляем его путь
+    const imageUrl = req.file ? `/uploads/meals/${req.file.filename}` : meal.image_url;
+
+    await meal.update({
+      name,
+      meal_type,
+      calories,
+      protein,
+      fats,
+      carbs,
+      description,
+      image_url: imageUrl,
+    });
+
+    return res.status(200).json(meal);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Ошибка при обновлении приема пищи' });
+  }
+});
+
+// 5. Удаление приема пищи по ID
+router.delete('/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
     const meal = await Meal.findByPk(id);
 
     if (!meal) {
-      return res.status(404).json({ error: "Блюдо не найдено" });
-    }
-
-    // Удаление изображения блюда
-    if (meal.image_url) {
-      fs.unlink(path.join(__dirname, "../", meal.image_url), (err) => {
-        if (err) console.error("Ошибка при удалении файла: ", err);
-      });
+      return res.status(404).json({ error: 'Прием пищи не найден' });
     }
 
     await meal.destroy();
 
-    return res.status(200).json({ message: "Блюдо успешно удалено" });
+    return res.status(200).json({ message: 'Прием пищи успешно удален' });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Ошибка сервера" });
+    return res.status(500).json({ error: 'Ошибка при удалении приема пищи' });
   }
 });
 

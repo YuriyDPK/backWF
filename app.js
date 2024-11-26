@@ -8,6 +8,12 @@ const userRoutes = require("./routes/userRoutes");
 const ingredientRoutes = require("./routes/ingredientRoutes");
 const mealRoutes = require("./routes/mealRoutes");
 const mealIngredientRoutes = require("./routes/mealIngredientRoutes");
+const goalRoutes = require('./routes/goalRoutes'); // Импорт маршрутов для целей
+const dishRoutes = require('./routes/dishRoutes'); // Импорт маршрутов для Dish
+const orderRoutes = require('./routes/orderRoutes'); // Импорт маршрутов для Order
+const mealPlanRoutes = require('./routes/mealPlanRoutes'); // Импорт маршрутов для MealPlan
+const userChoiceRoutes = require('./routes/userChoiceRoutes'); // Импорт маршрутов для UserChoice
+const cartRoutes = require('./routes/cartRoutes');
 
 const app = express();
 app.use(express.json());
@@ -36,6 +42,12 @@ app.use("/api/user", userRoutes);
 app.use("/api/meal", mealRoutes);
 app.use("/api/ingredients", ingredientRoutes);
 app.use("/api/meal-ingredients", mealIngredientRoutes);
+app.use('/api/goals', goalRoutes); 
+app.use('/api/dishes', dishRoutes); // Подключаем маршруты
+app.use('/api/orders', orderRoutes); // Подключаем маршруты
+app.use('/api/meal-plans', mealPlanRoutes); // Подключаем маршруты
+app.use('/api/user-choices', userChoiceRoutes); // Подключаем маршруты
+app.use('/api/cart', cartRoutes);
 
 // Запуск сервера
 const PORT = process.env.PORT || 3000;

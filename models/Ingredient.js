@@ -1,55 +1,48 @@
 // models/Ingredient.js
-const { DataTypes } = require("sequelize");
-const sequelize = require("../db"); // подключение к базе данных
+const { DataTypes } = require('sequelize');
+const sequelize = require('../db'); // Подключение к базе данных
+const Dish = require('./Dish'); // Импорт модели Dish
 
-const Ingredient = sequelize.define(
-  "Ingredient",
-  {
-    id: {
-      // Уникальный идентификатор ингредиента
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    name: {
-      // Название ингредиента
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    describe: {
-      // Описание
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    weight: {
-      // Вес ингредиента
-      type: DataTypes.FLOAT,
-      allowNull: true,
-    },
-    protein: {
-      // Количество белка
-      type: DataTypes.FLOAT,
-      allowNull: true,
-    },
-    fat: {
-      // Количество жиров
-      type: DataTypes.FLOAT,
-      allowNull: true,
-    },
-    carbs: {
-      // Количество углеводов
-      type: DataTypes.FLOAT,
-      allowNull: true,
-    },
-    kcal: {
-      // Калорийность ингредиента
-      type: DataTypes.FLOAT,
-      allowNull: true,
+const Ingredient = sequelize.define('Ingredient', {
+  dish_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: Dish, // Связь с таблицей Dish
+      key: 'id',
     },
   },
-  {
-    tableName: "ingredients", // указание имени таблицы
-  }
-);
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  calories: {
+    type: DataTypes.INTEGER,
+    allowNull: false, // Калорийность обязательно
+  },
+  protein: {
+    type: DataTypes.FLOAT, // Белки (граммы)
+    allowNull: false,
+    defaultValue: 0, // По умолчанию 0
+  },
+  fats: {
+    type: DataTypes.FLOAT, // Жиры (граммы)
+    allowNull: false,
+    defaultValue: 0, // По умолчанию 0
+  },
+  carbs: {
+    type: DataTypes.FLOAT, // Углеводы (граммы)
+    allowNull: false,
+    defaultValue: 0, // По умолчанию 0
+  },
+  weight: {
+    type: DataTypes.INTEGER, // Вес ингредиента в граммах
+    allowNull: false,
+  },
+});
+
+// Связь: Ingredient -> Dish
+Ingredient.belongsTo(Dish, { foreignKey: 'dish_id', as: 'dish' });
+Dish.hasMany(Ingredient, { foreignKey: 'dish_id', as: 'ingredients' });
 
 module.exports = Ingredient;

@@ -1,14 +1,19 @@
-// models/Meal.js
+// models/Dish.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db'); // Подключение к базе данных
+const Meal = require('./Meal'); // Импорт модели Meal
 
-const Meal = sequelize.define('Meal', {
+const Dish = sequelize.define('Dish', {
+  meal_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: Meal, // Связь с таблицей Meal
+      key: 'id',
+    },
+  },
   name: {
     type: DataTypes.STRING,
-    allowNull: false,
-  },
-  meal_type: {
-    type: DataTypes.ENUM('breakfast', 'lunch', 'dinner'),
     allowNull: false,
   },
   calories: {
@@ -33,4 +38,8 @@ const Meal = sequelize.define('Meal', {
   },
 });
 
-module.exports = Meal;
+// Связь: Dish -> Meal
+Dish.belongsTo(Meal, { foreignKey: 'meal_id', as: 'meal' });
+Meal.hasMany(Dish, { foreignKey: 'meal_id', as: 'dishes' });
+
+module.exports = Dish;

@@ -29,7 +29,7 @@ router.post("/", async (req, res) => {
 });
 
 // Получение всех ингредиентов для конкретного блюда
-router.get("/meal/:meal_id", async (req, res) => {
+router.get('/meal/:meal_id', async (req, res) => {
   const { meal_id } = req.params;
 
   try {
@@ -39,24 +39,31 @@ router.get("/meal/:meal_id", async (req, res) => {
         {
           model: Ingredient,
           attributes: [
-            "id",
-            "name",
-            "describe",
-            "weight",
-            "protein",
-            "fat",
-            "carbs",
-            "kcal",
+            'id',
+            'name',
+            'description',
+            'weight',
+            'protein',
+            'fats',
+            'carbs',
+            'calories',
           ],
         },
       ],
     });
-    return res.status(200).json(ingredients);
+
+    if (!ingredients || ingredients.length === 0) {
+      return res.status(404).json({ error: 'Ингредиенты для указанного блюда не найдены' });
+    }
+
+    // Возвращаем только данные ингредиентов
+    return res.status(200).json(ingredients.map((i) => i.Ingredient));
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Ошибка сервера" });
+    console.error('Ошибка при получении ингредиентов:', error.message, error.stack);
+    return res.status(500).json({ error: 'Ошибка при получении ингредиентов' });
   }
 });
+
 
 // Обновление количества ингредиента в блюде
 router.put("/:id", async (req, res) => {
@@ -108,5 +115,8 @@ router.delete("/:id", async (req, res) => {
     return res.status(500).json({ error: "Ошибка сервера" });
   }
 });
+
+MealIngredient.belongsTo(Ingredient, { foreignKey: 'ingredient_id' });
+Ingredient.hasMany(MealIngredient, { foreignKey: 'ingredient_id' });
 
 module.exports = router;

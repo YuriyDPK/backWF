@@ -1,10 +1,8 @@
-// models/MealIngredient.js
 const { DataTypes } = require("sequelize");
-const sequelize = require("../db"); // подключение к базе данных
+const sequelize = require("../db");
 const Meal = require("./Meal");
 const Ingredient = require("./Ingredient");
 
-// Создание таблицы для связи "многие ко многому" между Meal и Ingredient
 const MealIngredient = sequelize.define(
   "MealIngredient",
   {
@@ -30,17 +28,16 @@ const MealIngredient = sequelize.define(
       allowNull: false,
     },
     quantity: {
-      // Количество ингредиента для данного блюда (в граммах или других единицах)
       type: DataTypes.FLOAT,
       allowNull: true,
     },
   },
   {
-    tableName: "meal_ingredients", // указание имени таблицы
+    tableName: "meal_ingredients",
   }
 );
 
-// Определение ассоциаций "многие ко многому" между Meal и Ingredient
+// Ассоциации для "многие ко многому"
 Meal.belongsToMany(Ingredient, {
   through: MealIngredient,
   foreignKey: "meal_id",
@@ -49,5 +46,9 @@ Ingredient.belongsToMany(Meal, {
   through: MealIngredient,
   foreignKey: "ingredient_id",
 });
+
+// Ассоциации для использования с `include`
+MealIngredient.belongsTo(Ingredient, { foreignKey: "ingredient_id" });
+Ingredient.hasMany(MealIngredient, { foreignKey: "ingredient_id" });
 
 module.exports = MealIngredient;
