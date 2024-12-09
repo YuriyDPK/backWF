@@ -17,7 +17,8 @@ const upload = multer({ storage });
 // Регистрация или авторизация пользователя по номеру телефона
 router.post('/login', async (req, res) => {
   const { phone_number } = req.body;
-
+  console.log(phone_number);
+  
   if (!phone_number) {
     return res.status(400).json({ error: 'Необходимо указать номер телефона' });
   }

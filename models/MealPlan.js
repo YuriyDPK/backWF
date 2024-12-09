@@ -1,7 +1,7 @@
-// models/MealPlan.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db'); // Подключение к базе данных
-const Goal = require('./Goal'); // Импорт модели Goal для связи
+const Goal = require('./Goal'); // Импорт модели Goal
+const User = require('./User'); // Импорт модели User
 
 const MealPlan = sequelize.define('MealPlan', {
   goal_id: {
@@ -9,6 +9,14 @@ const MealPlan = sequelize.define('MealPlan', {
     allowNull: false,
     references: {
       model: Goal,
+      key: 'id',
+    },
+  },
+  user_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: User,
       key: 'id',
     },
   },
@@ -26,10 +34,22 @@ const MealPlan = sequelize.define('MealPlan', {
   discount_percentage: {
     type: DataTypes.INTEGER,
   },
+}, {
+  tableName: 'meal_plans',
+  indexes: [
+    {
+      unique: true,
+      fields: ['goal_id', 'user_id'], // Составной уникальный индекс
+    },
+  ],
 });
 
 // Связь: MealPlan -> Goal
 MealPlan.belongsTo(Goal, { foreignKey: 'goal_id', as: 'goal' });
 Goal.hasMany(MealPlan, { foreignKey: 'goal_id', as: 'mealPlans' });
+
+// Связь: MealPlan -> User
+MealPlan.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+User.hasMany(MealPlan, { foreignKey: 'user_id', as: 'mealPlans' });
 
 module.exports = MealPlan;

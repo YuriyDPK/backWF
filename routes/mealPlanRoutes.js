@@ -9,7 +9,7 @@ const router = express.Router();
 
 // 1. Создание нового плана питания
 router.post('/', async (req, res) => {
-  const { goal_id, duration_days, price_per_day, bonus_points, discount_percentage } = req.body;
+  const { goal_id, user_id, duration_days, price_per_day, bonus_points, discount_percentage } = req.body;
 
   try {
     // Проверяем, существует ли указанная цель
@@ -18,8 +18,18 @@ router.post('/', async (req, res) => {
       return res.status(404).json({ error: 'Цель не найдена' });
     }
 
+    // Проверяем, существует ли запись с такой же парой goal_id и user_id
+    const existingMealPlan = await MealPlan.findOne({
+      where: { goal_id, user_id },
+    });
+    if (existingMealPlan) {
+      return res.status(400).json({ error: 'План питания для этой цели и пользователя уже существует' });
+    }
+
+    // Создаем новый план питания
     const newMealPlan = await MealPlan.create({
       goal_id,
+      user_id,
       duration_days,
       price_per_day,
       bonus_points,
@@ -107,5 +117,27 @@ router.delete('/:id', async (req, res) => {
     return res.status(500).json({ error: 'Ошибка при удалении плана питания' });
   }
 });
+// 6. Проверка плана питания по ID на уже существующие
+router.get('/check', async (req, res) => {
+  const { goal_id, user_id } = req.query;
+
+  try {
+    const existingMealPlan = await MealPlan.findOne({
+      where: { goal_id, user_id },
+    });
+
+    if (existingMealPlan) {
+      console.log(existingMealPlan);
+      
+      return res.status(200).json({ exists: true });
+    }
+    console.log(222);
+    return res.status(200).json({ exists: false });
+  } catch (error) {
+    console.error('Ошибка при проверке плана питания:', error);
+    return res.status(500).json({ error: 'Ошибка при проверке плана питания' });
+  }
+});
+
 
 module.exports = router;
