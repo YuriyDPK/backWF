@@ -33,7 +33,7 @@ const MealIngredient = sequelize.define(
     },
   },
   {
-    tableName: "meal_ingredients",
+    tableName: "MealIngredients",
   }
 );
 

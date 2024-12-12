@@ -4,6 +4,7 @@ const multer = require('multer');
 const path = require('path');
 const Meal = require('../models/Meal'); // Импорт модели Meal
 const Ingredient = require('../models/Ingredient'); // Импорт модели Meal
+const { log } = require('console');
 
 const router = express.Router();
 
@@ -65,6 +66,8 @@ router.get('/with-ingridients', async (req, res) => {
         },
       ],
     });
+    console.log(meals);
+    
     return res.status(200).json(meals);
   } catch (error) {
     console.error(error);
