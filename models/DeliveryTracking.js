@@ -1,6 +1,8 @@
 // models/DeliveryTracking.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db'); // подключение к базе данных
+const Courier = require('./Courier');
+const DeliverySchedule = require('./DeliverySchedule');
 
 const DeliveryTracking = sequelize.define('DeliveryTracking', {
   id: { // Уникальный идентификатор отслеживания доставки
@@ -11,7 +13,7 @@ const DeliveryTracking = sequelize.define('DeliveryTracking', {
   delivery_schedule_id: { // Идентификатор графика доставки
     type: DataTypes.INTEGER,
     references: {
-      model: 'DeliverySchedules',
+      model: DeliverySchedule,
       key: 'id'
     },
     allowNull: false
@@ -19,7 +21,7 @@ const DeliveryTracking = sequelize.define('DeliveryTracking', {
   courier_id: { // Идентификатор курьера
     type: DataTypes.INTEGER,
     references: {
-      model: 'Couriers',
+      model: Courier,
       key: 'id'
     },
     allowNull: false
@@ -37,7 +39,7 @@ const DeliveryTracking = sequelize.define('DeliveryTracking', {
     allowNull: true
   }
 }, {
-  tableName: 'delivery_tracking' // указание имени таблицы
+  tableName: 'DeliveryTracking' // указание имени таблицы
 });
 
 module.exports = DeliveryTracking;

@@ -1,6 +1,8 @@
 // models/PaymentMethod.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db'); // подключение к базе данных
+const Address = require('./Address');
+const User = require('./User');
 
 const PaymentMethod = sequelize.define('PaymentMethod', {
   id: { // Уникальный идентификатор способа оплаты
@@ -11,7 +13,7 @@ const PaymentMethod = sequelize.define('PaymentMethod', {
   user_id: { // Идентификатор пользователя
     type: DataTypes.INTEGER,
     references: {
-      model: 'Users',
+      model: User,
       key: 'id'
     },
     allowNull: false
@@ -31,7 +33,7 @@ const PaymentMethod = sequelize.define('PaymentMethod', {
   billing_address_id: { // Адрес для выставления счета
     type: DataTypes.INTEGER,
     references: {
-      model: 'Addresses',
+      model: Address,
       key: 'id'
     },
     allowNull: false
@@ -41,7 +43,7 @@ const PaymentMethod = sequelize.define('PaymentMethod', {
     defaultValue: false
   }
 }, {
-  tableName: 'payment_methods' // указание имени таблицы
+  tableName: 'PaymentMethod' // указание имени таблицы
 });
 
 module.exports = PaymentMethod;

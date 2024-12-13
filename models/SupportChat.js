@@ -1,6 +1,8 @@
 // models/SupportChat.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db'); // подключение к базе данных
+const User = require('./User');
+const SupportAgent = require('./SupportAgent');
 
 const SupportChat = sequelize.define('SupportChat', {
   id: { // Уникальный идентификатор сообщения в чате поддержки
@@ -11,7 +13,7 @@ const SupportChat = sequelize.define('SupportChat', {
   user_id: { // Идентификатор пользователя
     type: DataTypes.INTEGER,
     references: {
-      model: 'Users',
+      model: User,
       key: 'id'
     },
     allowNull: false
@@ -19,7 +21,7 @@ const SupportChat = sequelize.define('SupportChat', {
   support_agent_id: { // Идентификатор агента поддержки
     type: DataTypes.INTEGER,
     references: {
-      model: 'SupportAgents',
+      model: SupportAgent,
       key: 'id'
     },
     allowNull: false
@@ -37,7 +39,7 @@ const SupportChat = sequelize.define('SupportChat', {
     defaultValue: true
   }
 }, {
-  tableName: 'support_chats' // указание имени таблицы
+  tableName: 'SupportChat' // указание имени таблицы
 });
 
 module.exports = SupportChat;

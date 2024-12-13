@@ -1,7 +1,7 @@
 // models/Feedback.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db'); // подключение к базе данных
-
+const User = require('./User');
 const Feedback = sequelize.define('Feedback', {
   id: { // Уникальный идентификатор отзыва
     type: DataTypes.INTEGER,
@@ -11,7 +11,7 @@ const Feedback = sequelize.define('Feedback', {
   user_id: { // Идентификатор пользователя, оставившего отзыв
     type: DataTypes.INTEGER,
     references: {
-      model: 'Users',
+      model: User,
       key: 'id'
     },
     allowNull: false
@@ -29,7 +29,7 @@ const Feedback = sequelize.define('Feedback', {
     allowNull: false
   }
 }, {
-  tableName: 'feedback' // указание имени таблицы
+  tableName: 'Feedback' // указание имени таблицы
 });
 
 module.exports = Feedback;

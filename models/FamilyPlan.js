@@ -1,6 +1,8 @@
 // models/FamilyPlan.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db'); // подключение к базе данных
+const User = require('./User');
+const Goal = require('./Goal');
 
 const FamilyPlan = sequelize.define('FamilyPlan', {
   id: { // Уникальный идентификатор семейного плана
@@ -11,7 +13,7 @@ const FamilyPlan = sequelize.define('FamilyPlan', {
   user_id: { // Идентификатор пользователя, создавшего семейный план
     type: DataTypes.INTEGER,
     references: {
-      model: 'Users',
+      model: User,
       key: 'id'
     },
     allowNull: false
@@ -27,7 +29,7 @@ const FamilyPlan = sequelize.define('FamilyPlan', {
   shared_goal_id: { // Идентификатор цели, связанной с планом
     type: DataTypes.INTEGER,
     references: {
-      model: 'Goals',
+      model: Goal,
       key: 'id'
     },
     allowNull: true
@@ -37,7 +39,7 @@ const FamilyPlan = sequelize.define('FamilyPlan', {
     allowNull: true
   }
 }, {
-  tableName: 'family_plans' // указание имени таблицы
+  tableName: 'FamilyPlan' // указание имени таблицы
 });
 
 module.exports = FamilyPlan;

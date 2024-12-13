@@ -1,6 +1,9 @@
 // models/Subscription.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db'); // подключение к базе данных
+const User = require('./User');
+const Goal = require('./Goal');
+const PaymentMethod = require('./PaymentMethod');
 
 const Subscription = sequelize.define('Subscription', {
   id: { // Уникальный идентификатор подписки
@@ -11,7 +14,7 @@ const Subscription = sequelize.define('Subscription', {
   user_id: { // Идентификатор пользователя
     type: DataTypes.INTEGER,
     references: {
-      model: 'Users',
+      model: User,
       key: 'id'
     },
     allowNull: false
@@ -19,7 +22,7 @@ const Subscription = sequelize.define('Subscription', {
   goal_id: { // Идентификатор цели подписки
     type: DataTypes.INTEGER,
     references: {
-      model: 'Goals',
+      model: Goal,
       key: 'id'
     },
     allowNull: false
@@ -35,7 +38,7 @@ const Subscription = sequelize.define('Subscription', {
   payment_method_id: { // Идентификатор способа оплаты
     type: DataTypes.INTEGER,
     references: {
-      model: 'PaymentMethods',
+      model: PaymentMethod,
       key: 'id'
     },
     allowNull: false
@@ -45,7 +48,7 @@ const Subscription = sequelize.define('Subscription', {
     defaultValue: false
   }
 }, {
-  tableName: 'subscriptions' // указание имени таблицы
+  tableName: 'Subscription' // указание имени таблицы
 });
 
 module.exports = Subscription;

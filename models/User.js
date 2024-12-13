@@ -92,7 +92,7 @@ const User = sequelize.define('User', {
     allowNull: true
   }
 }, {
-  tableName: 'users' // указание имени таблицы
+  tableName: 'User' // указание имени таблицы
 });
 
 module.exports = User;

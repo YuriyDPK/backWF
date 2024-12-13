@@ -31,6 +31,8 @@ const Meal = sequelize.define('Meal', {
     type: DataTypes.STRING,
     allowNull: true,
   },
+}, {
+  tableName: 'Meal' // указание имени таблицы
 });
 
 module.exports = Meal;

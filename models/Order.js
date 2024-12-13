@@ -32,10 +32,12 @@ const Order = sequelize.define('Order', {
     type: DataTypes.ENUM('pending', 'confirmed', 'cancelled'),
     defaultValue: 'pending',
   },
+}, {
+  tableName: 'Order' // указание имени таблицы
 });
 
 // Связь: Order -> MealPlan
-Order.belongsTo(MealPlan, { foreignKey: 'meal_plan_id', as: 'mealPlan' });
-MealPlan.hasMany(Order, { foreignKey: 'meal_plan_id', as: 'orders' });
+Order.belongsTo(MealPlan, { foreignKey: 'meal_plan_id', as: 'MealPlan' });
+MealPlan.hasMany(Order, { foreignKey: 'meal_plan_id', as: 'Order' });
 
 module.exports = Order;

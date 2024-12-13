@@ -1,6 +1,8 @@
 // models/UserGoal.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db'); // подключение к базе данных
+const Goal = require('./Goal');
+const User = require('./User');
 
 const UserGoal = sequelize.define('UserGoal', {
   id: { // Уникальный идентификатор связи пользователя и цели
@@ -11,7 +13,7 @@ const UserGoal = sequelize.define('UserGoal', {
   user_id: { // Идентификатор пользователя
     type: DataTypes.INTEGER,
     references: {
-      model: 'Users',
+      model: User,
       key: 'id'
     },
     allowNull: false
@@ -19,7 +21,7 @@ const UserGoal = sequelize.define('UserGoal', {
   goal_id: { // Идентификатор цели
     type: DataTypes.INTEGER,
     references: {
-      model: 'Goals',
+      model: Goal,
       key: 'id'
     },
     allowNull: false
@@ -29,7 +31,7 @@ const UserGoal = sequelize.define('UserGoal', {
     allowNull: true
   }
 }, {
-  tableName: 'user_goals' // указание имени таблицы
+  tableName: 'UserGoal' // указание имени таблицы
 });
 
 module.exports = UserGoal;

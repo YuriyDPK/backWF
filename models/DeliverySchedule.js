@@ -1,6 +1,8 @@
 // models/DeliverySchedule.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db'); // подключение к базе данных
+const User = require('./User');
+const Address = require('./Address');
 
 const DeliverySchedule = sequelize.define('DeliverySchedule', {
   id: { // Уникальный идентификатор графика доставки
@@ -11,7 +13,7 @@ const DeliverySchedule = sequelize.define('DeliverySchedule', {
   user_id: { // Идентификатор пользователя
     type: DataTypes.INTEGER,
     references: {
-      model: 'Users',
+      model: User,
       key: 'id'
     },
     allowNull: false
@@ -39,7 +41,7 @@ const DeliverySchedule = sequelize.define('DeliverySchedule', {
   address_id: { // Идентификатор адреса доставки
     type: DataTypes.INTEGER,
     references: {
-      model: 'Addresses',
+      model: Address,
       key: 'id'
     },
     allowNull: false
@@ -57,7 +59,7 @@ const DeliverySchedule = sequelize.define('DeliverySchedule', {
     allowNull: true
   }
 }, {
-  tableName: 'delivery_schedules' // указание имени таблицы
+  tableName: 'DeliverySchedule' // указание имени таблицы
 });
 
 module.exports = DeliverySchedule;

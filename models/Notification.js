@@ -1,6 +1,7 @@
 // models/Notification.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db'); // подключение к базе данных
+const User = require('./User'); // Импорт модели Meal
 
 const Notification = sequelize.define('Notification', {
   id: { // Уникальный идентификатор уведомления
@@ -11,7 +12,7 @@ const Notification = sequelize.define('Notification', {
   user_id: { // Идентификатор пользователя, которому предназначено уведомление
     type: DataTypes.INTEGER,
     references: {
-      model: 'Users',
+      model: User,
       key: 'id'
     },
     allowNull: false
@@ -33,7 +34,7 @@ const Notification = sequelize.define('Notification', {
     defaultValue: false
   }
 }, {
-  tableName: 'notifications' // указание имени таблицы
+  tableName: 'Notification' // указание имени таблицы
 });
 
 module.exports = Notification;

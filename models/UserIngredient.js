@@ -1,7 +1,8 @@
 // models/UserIngredient.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db'); // подключение к базе данных
-
+const User = require('./User');
+const Ingredient = require('./Ingredient');
 const UserIngredient = sequelize.define('UserIngredient', {
   id: { // Уникальный идентификатор связи пользователя и ингредиента
     type: DataTypes.INTEGER,
@@ -11,7 +12,7 @@ const UserIngredient = sequelize.define('UserIngredient', {
   user_id: { // Идентификатор пользователя
     type: DataTypes.INTEGER,
     references: {
-      model: 'Users',
+      model: User,
       key: 'id'
     },
     allowNull: false
@@ -19,7 +20,7 @@ const UserIngredient = sequelize.define('UserIngredient', {
   ingredient_id: { // Идентификатор ингредиента
     type: DataTypes.INTEGER,
     references: {
-      model: 'Ingredients',
+      model: Ingredient,
       key: 'id'
     },
     allowNull: false
@@ -29,7 +30,7 @@ const UserIngredient = sequelize.define('UserIngredient', {
     defaultValue: false
   }
 }, {
-  tableName: 'user_ingredients' // указание имени таблицы
+  tableName: 'UserIngredient' // указание имени таблицы
 });
 
 module.exports = UserIngredient;

@@ -1,6 +1,7 @@
 // models/Wallet.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db'); // подключение к базе данных
+const User = require('./User');
 
 const Wallet = sequelize.define('Wallet', {
   id: { // Уникальный идентификатор кошелька
@@ -11,7 +12,7 @@ const Wallet = sequelize.define('Wallet', {
   user_id: { // Идентификатор пользователя
     type: DataTypes.INTEGER,
     references: {
-      model: 'Users',
+      model: User,
       key: 'id'
     },
     allowNull: false
@@ -25,7 +26,7 @@ const Wallet = sequelize.define('Wallet', {
     defaultValue: 0
   }
 }, {
-  tableName: 'wallets' // указание имени таблицы
+  tableName: 'Wallet' // указание имени таблицы
 });
 
 module.exports = Wallet;

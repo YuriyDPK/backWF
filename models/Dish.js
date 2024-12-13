@@ -36,10 +36,12 @@ const Dish = sequelize.define('Dish', {
     type: DataTypes.STRING,
     allowNull: true,
   },
+}, {
+  tableName: 'Dish' // указание имени таблицы
 });
 
 // Связь: Dish -> Meal
-Dish.belongsTo(Meal, { foreignKey: 'meal_id', as: 'meal' });
-Meal.hasMany(Dish, { foreignKey: 'meal_id', as: 'dishes' });
+Dish.belongsTo(Meal, { foreignKey: 'meal_id', as: 'Meal' });
+Meal.hasMany(Dish, { foreignKey: 'meal_id', as: 'Dish' });
 
 module.exports = Dish;

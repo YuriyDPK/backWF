@@ -1,6 +1,8 @@
 // models/UserStopList.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db'); // подключение к базе данных
+const User = require('./User');
+const Meal = require('./Meal');
 
 const UserStopList = sequelize.define('UserStopList', {
   id: { // Уникальный идентификатор стоп-листа пользователя
@@ -11,7 +13,7 @@ const UserStopList = sequelize.define('UserStopList', {
   user_id: { // Идентификатор пользователя
     type: DataTypes.INTEGER,
     references: {
-      model: 'Users',
+      model: User,
       key: 'id'
     },
     allowNull: false
@@ -19,7 +21,7 @@ const UserStopList = sequelize.define('UserStopList', {
   meal_id: { // Идентификатор блюда
     type: DataTypes.INTEGER,
     references: {
-      model: 'Meals',
+      model: Meal,
       key: 'id'
     },
     allowNull: false
@@ -29,7 +31,7 @@ const UserStopList = sequelize.define('UserStopList', {
     allowNull: true
   }
 }, {
-  tableName: 'user_stop_lists' // указание имени таблицы
+  tableName: 'UserStopList' // указание имени таблицы
 });
 
 module.exports = UserStopList;

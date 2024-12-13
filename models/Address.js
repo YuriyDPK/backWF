@@ -1,7 +1,7 @@
 // models/Address.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db'); // подключение к базе данных
-
+const User = require('./User');
 const Address = sequelize.define('Address', {
   id: { // Уникальный идентификатор адреса
     type: DataTypes.INTEGER,
@@ -11,7 +11,7 @@ const Address = sequelize.define('Address', {
   user_id: { // Идентификатор пользователя
     type: DataTypes.INTEGER,
     references: {
-      model: 'Users',
+      model: User,
       key: 'id'
     },
     allowNull: false
@@ -41,7 +41,7 @@ const Address = sequelize.define('Address', {
     defaultValue: false
   }
 }, {
-  tableName: 'addresses' // указание имени таблицы
+  tableName: 'Address' // указание имени таблицы
 });
 
 module.exports = Address;

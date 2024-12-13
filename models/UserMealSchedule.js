@@ -1,6 +1,8 @@
 // models/UserMealSchedule.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db'); // подключение к базе данных
+const DeliverySchedule = require('./DeliverySchedule');
+const Meal = require('./Meal');
 
 const UserMealSchedule = sequelize.define('UserMealSchedule', {
   id: { // Уникальный идентификатор графика приема пищи пользователя
@@ -11,7 +13,7 @@ const UserMealSchedule = sequelize.define('UserMealSchedule', {
   delivery_schedule_id: { // Идентификатор графика доставки
     type: DataTypes.INTEGER,
     references: {
-      model: 'DeliverySchedules',
+      model: DeliverySchedule,
       key: 'id'
     },
     allowNull: false
@@ -19,7 +21,7 @@ const UserMealSchedule = sequelize.define('UserMealSchedule', {
   meal_id: { // Идентификатор блюда
     type: DataTypes.INTEGER,
     references: {
-      model: 'Meals',
+      model: Meal,
       key: 'id'
     },
     allowNull: false
@@ -33,7 +35,7 @@ const UserMealSchedule = sequelize.define('UserMealSchedule', {
     allowNull: false
   }
 }, {
-  tableName: 'user_meal_schedules' // указание имени таблицы
+  tableName: 'UserMealSchedule' // указание имени таблицы
 });
 
 module.exports = UserMealSchedule;

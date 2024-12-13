@@ -22,7 +22,7 @@ const Courier = sequelize.define('Courier', {
     allowNull: true
   }
 }, {
-  tableName: 'couriers' // указание имени таблицы
+  tableName: 'Courier' // указание имени таблицы
 });
 
 module.exports = Courier;

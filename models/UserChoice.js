@@ -20,10 +20,12 @@ const UserChoice = sequelize.define('UserChoice', {
     type: DataTypes.JSON, // JSON-формат для хранения удаленных ингредиентов
     allowNull: true,
   },
+}, {
+  tableName: 'UserChoice' // указание имени таблицы
 });
 
 // Связь: UserChoice -> Dish
-UserChoice.belongsTo(Dish, { foreignKey: 'dish_id', as: 'dish' });
-Dish.hasMany(UserChoice, { foreignKey: 'dish_id', as: 'userChoices' });
+UserChoice.belongsTo(Dish, { foreignKey: 'dish_id', as: 'Dish' });
+Dish.hasMany(UserChoice, { foreignKey: 'dish_id', as: 'UserChoice' });
 
 module.exports = UserChoice;

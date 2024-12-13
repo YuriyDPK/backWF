@@ -35,7 +35,7 @@ const MealPlan = sequelize.define('MealPlan', {
     type: DataTypes.INTEGER,
   },
 }, {
-  tableName: 'meal_plans',
+  tableName: 'MealPlan',
   indexes: [
     {
       unique: true,
@@ -45,11 +45,11 @@ const MealPlan = sequelize.define('MealPlan', {
 });
 
 // Связь: MealPlan -> Goal
-MealPlan.belongsTo(Goal, { foreignKey: 'goal_id', as: 'goal' });
-Goal.hasMany(MealPlan, { foreignKey: 'goal_id', as: 'mealPlans' });
+MealPlan.belongsTo(Goal, { foreignKey: 'goal_id', as: 'Goal' });
+Goal.hasMany(MealPlan, { foreignKey: 'goal_id', as: 'MealPlan' });
 
 // Связь: MealPlan -> User
-MealPlan.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
-User.hasMany(MealPlan, { foreignKey: 'user_id', as: 'mealPlans' });
+MealPlan.belongsTo(User, { foreignKey: 'user_id', as: 'User' });
+User.hasMany(MealPlan, { foreignKey: 'user_id', as: 'MealPlan' });
 
 module.exports = MealPlan;

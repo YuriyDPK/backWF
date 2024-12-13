@@ -1,6 +1,8 @@
 // models/UserMeal.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db'); // подключение к базе данных
+const Meal = require('./Meal');
+const User = require('./User');
 
 const UserMeal = sequelize.define('UserMeal', {
   id: { // Уникальный идентификатор связи пользователя и блюда
@@ -11,7 +13,7 @@ const UserMeal = sequelize.define('UserMeal', {
   user_id: { // Идентификатор пользователя
     type: DataTypes.INTEGER,
     references: {
-      model: 'Users',
+      model: User,
       key: 'id'
     },
     allowNull: false
@@ -19,7 +21,7 @@ const UserMeal = sequelize.define('UserMeal', {
   meal_id: { // Идентификатор блюда
     type: DataTypes.INTEGER,
     references: {
-      model: 'Meals',
+      model: Meal,
       key: 'id'
     },
     allowNull: false
@@ -33,7 +35,7 @@ const UserMeal = sequelize.define('UserMeal', {
     defaultValue: false
   }
 }, {
-  tableName: 'user_meals' // указание имени таблицы
+  tableName: 'UserMeal' // указание имени таблицы
 });
 
 module.exports = UserMeal;

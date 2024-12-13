@@ -30,6 +30,8 @@ const Cart = sequelize.define('Cart', {
     type: DataTypes.INTEGER,
     defaultValue: 1,
   },
+}, {
+  tableName: 'Cart' // указание имени таблицы
 });
 
 Cart.belongsTo(User, { foreignKey: 'user_id' });

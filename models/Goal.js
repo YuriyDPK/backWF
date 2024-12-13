@@ -26,6 +26,8 @@ const Goal = sequelize.define('Goal', {
     type: DataTypes.STRING,
     allowNull: true,
   },
+}, {
+  tableName: 'Goal' // указание имени таблицы
 });
 
 module.exports = Goal;

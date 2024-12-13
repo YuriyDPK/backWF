@@ -1,6 +1,7 @@
 // models/PaymentOption.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db'); // подключение к базе данных
+const Goal = require('./Goal');
 
 const PaymentOption = sequelize.define('PaymentOption', {
   id: { // Уникальный идентификатор варианта оплаты
@@ -11,7 +12,7 @@ const PaymentOption = sequelize.define('PaymentOption', {
   goal_id: { // Идентификатор цели, к которой привязан вариант оплаты
     type: DataTypes.INTEGER,
     references: {
-      model: 'Goals',
+      model: Goal,
       key: 'id'
     },
     allowNull: false
@@ -37,7 +38,7 @@ const PaymentOption = sequelize.define('PaymentOption', {
     allowNull: true
   }
 }, {
-  tableName: 'payment_options' // указание имени таблицы
+  tableName: 'PaymentOption' // указание имени таблицы
 });
 
 module.exports = PaymentOption;

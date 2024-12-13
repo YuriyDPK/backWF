@@ -17,7 +17,7 @@ const SupportAgent = sequelize.define('SupportAgent', {
     allowNull: true
   }
 }, {
-  tableName: 'support_agents' // указание имени таблицы
+  tableName: 'SupportAgent' // указание имени таблицы
 });
 
 module.exports = SupportAgent;

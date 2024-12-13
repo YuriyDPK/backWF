@@ -39,10 +39,12 @@ const Ingredient = sequelize.define('Ingredient', {
     type: DataTypes.INTEGER, // Вес ингредиента в граммах
     allowNull: false,
   },
+}, {
+  tableName: 'Ingredient' // указание имени таблицы
 });
 
 // Связь: Ingredient -> Dish
-Ingredient.belongsTo(Dish, { foreignKey: 'dish_id', as: 'dish' });
-Dish.hasMany(Ingredient, { foreignKey: 'dish_id', as: 'ingredients' });
+Ingredient.belongsTo(Dish, { foreignKey: 'dish_id', as: 'Dish' });
+Dish.hasMany(Ingredient, { foreignKey: 'dish_id', as: 'Ingredient' });
 
 module.exports = Ingredient;
